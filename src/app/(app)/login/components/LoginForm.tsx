@@ -52,7 +52,7 @@ export default function LoginForm(): ReactElement {
       </form>
       <p className="mt-10 text-center text-sm text-gray-400">
           Don't have an account?{' '}
-          <Link href="/login" className="font-semibold leading-6 text-headBlue-500 hover:text-headBlue-400">
+          <Link href="/signup" className="font-semibold leading-6 text-headBlue-500 hover:text-headBlue-400">
             Sign Up
           </Link>
         </p>

@@ -21,12 +21,14 @@ export default function LoginForm(): ReactElement {
     const password = formData.get("password") as string;
 
     const result: LoginResponse = await login({ email, password });
+    console.log(result)
 
     setIsPending(false);
 
     if (result.success) {
       // Redirect manually after successful login
-      router.push("/dashboard");
+      if(result.isMember) router.push("/member");
+      if(!result.isMember) router.push("/customer");
     } else {
       // Display the error message
       setError(result.error || "Login failed");

@@ -6,25 +6,23 @@ import { cookies } from 'next/headers'
 import { Customer } from '@/payload-types'
 import { getUser } from '@/app/(app)/(authenticated)/actions/getUser'
 
-export interface MembershipParams {
-  planName: string,
-  cost: number,
-  numberOfSessions: number,
-  memberId: string
-}
-export interface Response {
-  success: boolean;
-}
 
 
 
-export async function submitMembership({ ...values }: MembershipParams): Promise<Response> {
+
+export async function getMembershipsByMember(): Promise<Response> {
   const payload = await getPayload({ config })
   const user = await getUser()
   console.log(user)
-  const result = await payload.create({
+  const result = await payload.find({
     collection: 'memberships',
-    data: { ...values, memberId: user.id  },
+    where: {
+      memberId: {
+        equals: user.id,
+      },
+    },
   })
+
   console.log(result)
+  return Promise.resolve(result.docs)
 }

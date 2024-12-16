@@ -2,6 +2,7 @@
 
 import React, { ReactElement, useCallback, useState } from 'react'
 import { CreateMemberships } from '@/app/(app)/(authenticated)/member/memberships/components/CreateMemberships'
+import { ListMemberships } from '@/app/(app)/(authenticated)/member/memberships/components/ListMemberships'
 
 
 export default function page(): ReactElement {
@@ -21,8 +22,8 @@ export default function page(): ReactElement {
             Create Membership Plan
           </button>
         </div>
-        {CreateMemberships()}
-
+        <CreateMemberships />
+        <ListMemberships />
       </div>
     </div>
   )

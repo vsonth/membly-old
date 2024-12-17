@@ -1,4 +1,5 @@
-import type { CollectionConfig } from 'payload';
+import type { CollectionConfig } from 'payload'
+import payload from 'payload'
 
 const Invitations: CollectionConfig = {
   slug: 'invitations',
@@ -45,9 +46,9 @@ const Invitations: CollectionConfig = {
       type: 'date',
       required: true,
       defaultValue: () => {
-        const date = new Date();
-        date.setDate(date.getDate() + 7); // Default expiration: 7 days from now
-        return date.toISOString();
+        const date = new Date()
+        date.setDate(date.getDate() + 7) // Default expiration: 7 days from now
+        return date.toISOString()
       },
     },
   ],
@@ -56,12 +57,40 @@ const Invitations: CollectionConfig = {
       async ({ data, operation }) => {
         if (operation === 'create') {
           // Generate a unique token
-          const crypto = await import('crypto');
-          data.invitationToken = crypto.randomBytes(32).toString('hex');
+          const crypto = await import('crypto')
+          data.invitationToken = crypto.randomBytes(32).toString('hex')
         }
       },
     ],
-  },
-};
+    afterChange: [
+      async ({ doc, operation }) => {
+        if (operation === 'create') {
+          try {
+            // Example: Send an email notification, log a message, or trigger an external API
+            console.log('Document created successfully:', doc)
+            const invitationToken = doc.invitationToken
+            const customerEmail = doc.customerEmail;
+            const name = doc.member.id;
+            // Example of triggering an external service:
+            const invitationLink = `localhost:3001/invite/${invitationToken}`
+            console.log(invitationLink)
+            console.log(doc)
+            console.log(payload)
+            await payload.sendEmail({
+              to: customerEmail,
+              subject: 'You’ve been invited to join!',
+              html: `<p>${name} has invited you to join. Click <a href='${invitationLink}'>here</a> to accept.</p>`,
+            })
 
-export default Invitations;
+            console.log('Post-creation action completed successfully.')
+          } catch (error) {
+            console.error('Error in post-creation action:', error)
+          }
+        }
+      },
+    ],
+
+  },
+}
+
+export default Invitations

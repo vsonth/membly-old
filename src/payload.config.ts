@@ -16,6 +16,7 @@ import { Customers } from './collections/Customers'
 import { Members } from '@/collections/Members'
 import { Memberships } from '@/collections/Memberships'
 import sendInvitationEmail from '@/app/(app)/(authenticated)/member/memberships/actions/sendInvitationEmail'
+import Invitations from '@/collections/Invitations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,7 +29,7 @@ export default buildConfig({
     },
   },
   email: brevoAdapter(),
-  collections: [Users, Media, Customers, Members, Memberships],
+  collections: [Users, Media, Customers, Members, Memberships, Invitations],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

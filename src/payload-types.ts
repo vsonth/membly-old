@@ -18,6 +18,7 @@ export interface Config {
     customers: Customer;
     members: Member;
     memberships: Membership;
+    invitations: Invitation;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -29,6 +30,7 @@ export interface Config {
     customers: CustomersSelect<false> | CustomersSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
     memberships: MembershipsSelect<false> | MembershipsSelect<true>;
+    invitations: InvitationsSelect<false> | InvitationsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -196,6 +198,20 @@ export interface Membership {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invitations".
+ */
+export interface Invitation {
+  id: string;
+  member: string | Member;
+  customerEmail: string;
+  status?: ('pending' | 'accepted' | 'expired') | null;
+  invitationToken: string;
+  expiresAt: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -220,6 +236,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'memberships';
         value: string | Membership;
+      } | null)
+    | ({
+        relationTo: 'invitations';
+        value: string | Invitation;
       } | null);
   globalSlug?: string | null;
   user:
@@ -356,6 +376,19 @@ export interface MembershipsSelect<T extends boolean = true> {
   numberOfSessions?: T;
   description?: T;
   memberId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invitations_select".
+ */
+export interface InvitationsSelect<T extends boolean = true> {
+  member?: T;
+  customerEmail?: T;
+  status?: T;
+  invitationToken?: T;
+  expiresAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

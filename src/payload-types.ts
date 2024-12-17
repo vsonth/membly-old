@@ -150,6 +150,8 @@ export interface Media {
  */
 export interface Customer {
   id: string;
+  associatedMember: string | Member;
+  invitedBy: string | Member;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -317,6 +319,8 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "customers_select".
  */
 export interface CustomersSelect<T extends boolean = true> {
+  associatedMember?: T;
+  invitedBy?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

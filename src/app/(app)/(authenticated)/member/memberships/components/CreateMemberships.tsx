@@ -7,7 +7,6 @@ import {
 
 export const CreateMemberships = () => {
 
-  console.log('membership')
   return (<div className=' flex flex justify-center gap-1'><Formik
     initialValues={{
       planName: '',

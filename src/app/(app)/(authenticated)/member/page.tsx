@@ -1,3 +1,5 @@
+'use client'
+
 import React, { ReactElement } from 'react'
 import NavBar from '@/app/(app)/(authenticated)/member/components/NavBar'
 

@@ -2,18 +2,13 @@
 
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { cookies } from 'next/headers'
-import { Customer } from '@/payload-types'
+import { Membership } from '@/payload-types'
 import { getUser } from '@/app/(app)/(authenticated)/actions/getUser'
 
 
-
-
-
-export async function getMembershipsByMember(): Promise<Response> {
+export async function getMembershipsByMember(): Promise<Membership | null> {
   const payload = await getPayload({ config })
   const user = await getUser()
-  console.log(user)
   const result = await payload.find({
     collection: 'memberships',
     where: {
@@ -22,7 +17,6 @@ export async function getMembershipsByMember(): Promise<Response> {
       },
     },
   })
-
   console.log(result)
-  return Promise.resolve(result.docs)
+  return result.docs
 }

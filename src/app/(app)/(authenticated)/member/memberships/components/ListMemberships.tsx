@@ -1,17 +1,19 @@
-'use client'
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 import { getMembershipsByMember } from '@/app/(app)/(authenticated)/member/memberships/actions/getMembershipsByMember'
 
-export const ListMemberships = async (): Promise<ReactElement> => {
-  const list = await getMembershipsByMember()
-  console.log(list)
+
+
+export default async function ListMemberships({}:{}): Promise<ReactElement | null> {
+
+  // const list = await getMembershipsByMember()
+  const list = []
   const renderList = list?.length > 0 && list.map(item => <div>
-    <div>{item.planName}</div>
-    <div>{item.cost}</div>
-    <div>{item.numberOfSessions}</div>
-    <div>{item.description}</div>
+    <div>{item?.planName}</div>
+    <div>{item?.cost}</div>
+    <div>{item?.numberOfSessions}</div>
+    <div>{item?.description}</div>
   </div>)
-  console.log('membership')
+
   return (
     <div className=' flex flex-col justify-center gap-1'>
       <div>Plans</div>

@@ -1,15 +1,18 @@
 'use client';
 
-import { useRouter } from "next/navigation";
-import { useState, FormEvent, ReactElement } from "react";
+import { useParams, useRouter } from 'next/navigation'
+import { useState, FormEvent, ReactElement, useEffect } from 'react'
 import Link from "next/link";
 import { signup, SignupResponse } from "../actions/signup";
-import SubmitButton from "../../components/SubmitButton";
+import SubmitButton from "../../../components/SubmitButton";
+import { findEmailByToken } from '@/app/(app)/invite/[token]/actions/findEmailByToken'
 
 export default function SignupForm(): ReactElement {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const params = useParams()
+  const [email, setEmail] = useState(null)
 
   async function onSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -27,7 +30,7 @@ export default function SignupForm(): ReactElement {
       return;
     }
 
-    const result: SignupResponse = await signup({ email, password });
+    const result: SignupResponse = await signup({ email, password, invitationToken: params.token });
     setIsPending(false);
 
     console.log(result);
@@ -40,6 +43,12 @@ export default function SignupForm(): ReactElement {
       setError(result.error || "Login failed");
     }
   }
+
+  useEffect(() => {
+    if(params.token){
+      findEmailByToken({ invitationToken: params.token }).then((e) => setEmail(e))
+    }
+  }, [params])
 
   return (
     <div className="flex gap-8 min-h-full flex-col justify-center items-center">
@@ -56,6 +65,8 @@ export default function SignupForm(): ReactElement {
               type="email"
               className="w-full textInput"
               required
+              value={email}
+              disabled
             />
           </div>
 
@@ -85,13 +96,6 @@ export default function SignupForm(): ReactElement {
 
           <SubmitButton loading={isPending} text="Sign Up" />
         </form>
-
-        <p className="mt-4 text-center text-sm text-gray-400">
-          Already have an account?{' '}
-          <Link href="/signin" className="font-semibold text-headBlue-500 hover:text-headBlue-400">
-            Sign In
-          </Link>
-        </p>
       </div>
     </div>
   );

@@ -153,7 +153,7 @@ export interface Media {
 export interface Customer {
   id: string;
   associatedMember: string | Member;
-  invitedBy: string | Member;
+  invitation: string | Invitation;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -184,20 +184,6 @@ export interface Member {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "memberships".
- */
-export interface Membership {
-  id: string;
-  planName: string;
-  cost: number;
-  numberOfSessions: number;
-  description: string;
-  memberId: string | Member;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "invitations".
  */
 export interface Invitation {
@@ -207,6 +193,20 @@ export interface Invitation {
   status?: ('pending' | 'accepted' | 'expired') | null;
   invitationToken: string;
   expiresAt: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "memberships".
+ */
+export interface Membership {
+  id: string;
+  planName: string;
+  cost: number;
+  numberOfSessions: number;
+  description: string;
+  memberId: string | Member;
   updatedAt: string;
   createdAt: string;
 }
@@ -340,7 +340,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CustomersSelect<T extends boolean = true> {
   associatedMember?: T;
-  invitedBy?: T;
+  invitation?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

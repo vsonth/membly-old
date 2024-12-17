@@ -17,10 +17,10 @@ export const Customers: CollectionConfig = {
       required: true, // Ensure every customer is associated with a member
     },
     {
-      name: 'invitedBy',
+      name: 'invitation',
       type: 'relationship',
-      relationTo: 'members',
-      required: true, // Not required since some customers may not be invited
+      relationTo: 'invitations',
+      required: true,
     }
   ],
   hooks: {

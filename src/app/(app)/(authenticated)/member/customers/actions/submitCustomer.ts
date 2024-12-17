@@ -19,13 +19,13 @@ export async function submitCustomer({email }: CustomerParams): Promise<Response
   const payload = await getPayload({ config })
   const user = await getUser()
   console.log(email, user.id)
-  const result = await payload.create({
+  const invitation = await payload.create({
     collection: 'invitations',
     data: { customerEmail: email, member: user.id  },
   })
   await payload.create({
     collection: 'customers',
-    data: { email: email, associatedMember: user.id, invitedBy: user.id  },
+    data: { email: email, associatedMember: user.id, invitedBy: user.id, invitation: invitation.id  },
   })
   console.log(result)
 }

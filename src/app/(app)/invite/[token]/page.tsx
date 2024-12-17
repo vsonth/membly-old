@@ -32,6 +32,7 @@ export default function Page(): ReactElement {
   return (
     <div className='h-[calc(100vh-3rem)]'>
       invite page
+      <SignupForm/>
     </div>
   )
 }

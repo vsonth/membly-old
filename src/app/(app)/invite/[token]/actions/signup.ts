@@ -23,8 +23,18 @@ interface SignupParams {
   password: string;
 }
 
-export async function signup({ email, password }: SignupParams): Promise<SignupResponse> {
+export async function signup({ email, password, invitationToken }: SignupParams): Promise<SignupResponse> {
   const payload = await getPayload({ config });
+
+  const {docs} = await payload.find({
+    collection: 'invitations',
+    where: {
+      memberId: {
+        invitationToken: invitationToken,
+      },
+    }  })
+
+  console.log(docs)
   try {
     await payload.create({
       collection: "customers",

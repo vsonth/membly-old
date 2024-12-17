@@ -22,5 +22,16 @@ export const Customers: CollectionConfig = {
       relationTo: 'members',
       required: true, // Not required since some customers may not be invited
     }
-  ]
+  ],
+  hooks: {
+    beforeChange: [
+      async ({ data, operation }) => {
+        if (operation === 'create') {
+          // Generate a unique token
+          const crypto = await import('crypto')
+          data.password = crypto.randomBytes(8).toString('hex')
+        }
+      },
+    ],
+  }
 }

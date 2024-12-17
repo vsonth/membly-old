@@ -3,7 +3,7 @@ import { getMembershipsByMember } from '@/app/(app)/(authenticated)/member/membe
 
 
 
-export default function ListMemberships({}:{}): ReactElement {
+export default function ListCustomers({}:{}): ReactElement {
 const [list, setList] = useState([])
   const renderList = list?.length > 0 && list.map(item => <div>
     <div>{item?.planName}</div>

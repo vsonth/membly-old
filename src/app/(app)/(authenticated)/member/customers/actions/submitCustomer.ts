@@ -23,5 +23,9 @@ export async function submitCustomer({email }: CustomerParams): Promise<Response
     collection: 'invitations',
     data: { customerEmail: email, member: user.id  },
   })
+  await payload.create({
+    collection: 'customers',
+    data: { email: email, associatedMember: user.id, invitedBy: user.id  },
+  })
   console.log(result)
 }

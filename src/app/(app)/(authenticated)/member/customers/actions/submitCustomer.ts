@@ -27,5 +27,4 @@ export async function submitCustomer({email }: CustomerParams): Promise<Response
     collection: 'customers',
     data: { email: email, associatedMember: user.id, invitedBy: user.id, invitation: invitation.id  },
   })
-  console.log(result)
 }

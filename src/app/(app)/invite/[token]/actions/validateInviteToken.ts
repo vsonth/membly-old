@@ -37,7 +37,8 @@ export async function validateInviteToken({ token }: InviteToken): Promise<Token
   console.log(result)
 
   let totalDocs = result.totalDocs
-  if (totalDocs === 1) return { success: true, error: false }
+  console.log(result)
+  if (totalDocs === 1) return { success: true, error: false , status: result.docs[0].status}
   return { success: false, error: true }
 
 }

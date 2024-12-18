@@ -51,7 +51,7 @@ export async function signup({
 
   console.log(customer, 'signup')
   try {
-    await payload.update({
+    const result = await payload.update({
       collection: 'customers',
       where: {
         id: {
@@ -63,40 +63,27 @@ export async function signup({
         password,
         firstName,
         lastName,
-        invitation:
-        docs[0].id,
-        associatedMember:
-        docs[0].member.id,
-
-      }
-      ,
-    })
-
-
-    const result: Result = await payload.login({
-      collection: 'customers',
-      data: {
-        email,
-        password,
+        invitation: docs[0].id,
+        associatedMember: docs[0].member.id,
       },
     })
 
-    if (result.token) {
-      let cookieStore = await cookies()
-      cookieStore.set({
-        name: 'payload-token',
-        value: result.token,
-        httpOnly: true,
-        path: '/',
+    if (result) {
+      await payload.update({
+        collection: 'invitations',
+        where: {
+          id: {
+            equals: docs[0].id,
+          },
+        }, data: {
+          status: 'accepted',
+        },
       })
-
       return { success: true }
     } else {
-      console.log('Login failed: No token received')
       return { success: false, error: 'An error occurred' }
     }
   } catch (error) {
-    console.log(error)
     return { success: false, error: 'An error occurred' }
   }
 }

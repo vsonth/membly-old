@@ -40,6 +40,8 @@ export const Customers: CollectionConfig = {
           // Generate a unique token
           const crypto = await import('crypto')
           data.password = crypto.randomBytes(8).toString('hex')
+          data.firstName = crypto.randomBytes(8).toString('hex')
+          data.lastName = crypto.randomBytes(8).toString('hex')
         }
       },
     ],

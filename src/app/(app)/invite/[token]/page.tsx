@@ -19,7 +19,11 @@ export default function Page(): ReactElement {
   useEffect(() => {
     if (params.token) {
       console.log(params.token)
-     validateInviteToken({ token: params.token }).then(r => {
+      validateInviteToken({ token: params.token }).then(r => {
+        console.log(r)
+        if (r.status === 'accepted') {
+          router.push('/invalidtoken')
+        }
         if (r.error) {
           router.push('/')
         }
@@ -32,7 +36,7 @@ export default function Page(): ReactElement {
   return (
     <div className='h-[calc(100vh-3rem)]'>
       invite page
-      <SignupForm/>
+      <SignupForm />
     </div>
   )
 }

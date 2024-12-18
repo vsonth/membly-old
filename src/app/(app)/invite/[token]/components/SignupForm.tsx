@@ -44,7 +44,7 @@ export default function SignupForm(): ReactElement {
 
     if (result.success) {
       // Redirect manually after successful login
-      router.push('/dashboard')
+      router.push('/login')
     } else {
       // Display the error message
       setError(result.error || 'Login failed')

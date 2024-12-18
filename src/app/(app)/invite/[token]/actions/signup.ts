@@ -1,10 +1,10 @@
-"use server";
+'use server'
 
-import config from "@payload-config";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation"
-import { Customer } from "@/payload-types";
-import { getPayload } from "payload";
+import config from '@payload-config'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { Customer } from '@/payload-types'
+import { getPayload } from 'payload'
 
 // we cannot import the type from payload/dist.../login so we define it here
 export type Result = {
@@ -15,7 +15,7 @@ export type Result = {
 
 export interface SignupResponse {
   success: boolean;
-  error?: string; 
+  error?: string;
 }
 
 interface SignupParams {
@@ -23,51 +23,80 @@ interface SignupParams {
   password: string;
 }
 
-export async function signup({ email, password, invitationToken }: SignupParams): Promise<SignupResponse> {
-  const payload = await getPayload({ config });
-
-  const {docs} = await payload.find({
+export async function signup({
+                               email,
+                               password,
+                               invitationToken,
+                               firstName,
+                               lastName,
+                             }: SignupParams): Promise<SignupResponse> {
+  const payload = await getPayload({ config })
+  console.log(email)
+  const { docs, ...rest } = await payload.find({
     collection: 'invitations',
     where: {
-      memberId: {
-        invitationToken: invitationToken,
+      invitationToken: {
+        equals: invitationToken,
       },
-    }  })
+    },
+  })
+  const customer = await payload.find({
+    collection: 'customers',
+    where: {
+      email: {
+        equals: email,
+      },
+    },
+  })
 
-  console.log(docs)
+  console.log(customer, 'signup')
   try {
-    await payload.create({
-      collection: "customers",
+    await payload.update({
+      collection: 'customers',
+      where: {
+        id: {
+          equals: customer.id,
+        },
+      },
       data: {
         email,
         password,
-      },
-    });
+        firstName,
+        lastName,
+        invitation:
+        docs[0].id,
+        associatedMember:
+        docs[0].member.id,
+
+      }
+      ,
+    })
+
 
     const result: Result = await payload.login({
-      collection: "customers",
+      collection: 'customers',
       data: {
         email,
         password,
       },
-    });
+    })
 
     if (result.token) {
-      let cookieStore = await cookies();
+      let cookieStore = await cookies()
       cookieStore.set({
         name: 'payload-token',
         value: result.token,
         httpOnly: true,
         path: '/',
-      });
+      })
 
-      return { success: true}
-    }else{
-      console.log('Login failed: No token received');
-      return { success: false, error: "An error occurred"}
+      return { success: true }
+    } else {
+      console.log('Login failed: No token received')
+      return { success: false, error: 'An error occurred' }
     }
   } catch (error) {
-    console.log(error);
-    return { success: false, error: "An error occurred"}
+    console.log(error)
+    return { success: false, error: 'An error occurred' }
   }
 }

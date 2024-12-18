@@ -1,13 +1,13 @@
-import type { CollectionConfig } from 'payload';
+import type { CollectionConfig } from 'payload'
 
 export const Customers: CollectionConfig = {
-  slug: "customers",
+  slug: 'customers',
   admin: {
-    useAsTitle: "email",
+    useAsTitle: 'email',
   },
-	access: {
-		create: () => true,
-	},
+  access: {
+    create: () => true,
+  },
   auth: true,
   fields: [
     {
@@ -21,7 +21,17 @@ export const Customers: CollectionConfig = {
       type: 'relationship',
       relationTo: 'invitations',
       required: true,
-    }
+    },
+    {
+      name: 'firstName',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'lastName',
+      type: 'text',
+      required: true,
+    },
   ],
   hooks: {
     beforeChange: [
@@ -33,5 +43,5 @@ export const Customers: CollectionConfig = {
         }
       },
     ],
-  }
+  },
 }

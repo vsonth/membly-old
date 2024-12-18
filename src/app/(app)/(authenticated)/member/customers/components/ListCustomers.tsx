@@ -35,7 +35,7 @@ const [list, setList] = useState([])
   const renderList = list?.length > 0 && list.map(item => {
     let link = createLink(item?.invitation.invitationToken)
 
-    return <div>
+    return <div className='flex flex-row gap-4'>
       <div>{item?.email}</div>
       <div>{item?.invitation.status}</div>
       <div>{isExpired(item?.invitation.expiresAt)}</div>
@@ -52,7 +52,7 @@ const [list, setList] = useState([])
   return (
     <div className=' flex flex-col justify-center gap-1'>
       <div>Customers</div>
-      <div className={'flex flex-row gap-4'}>{renderList}</div>
+      <div className={'flex flex-col gap-4'}>{renderList}</div>
     </div>
   )
 }

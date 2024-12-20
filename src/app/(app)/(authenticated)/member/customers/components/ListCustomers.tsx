@@ -1,6 +1,7 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 import { getMembershipsByMember } from '@/app/(app)/(authenticated)/member/memberships/actions/getMembershipsByMember'
 import { getCustomers } from '@/app/(app)/(authenticated)/member/customers/actions/getCustomers'
+import { resendEmail } from '@/app/(app)/(authenticated)/member/customers/actions/resendEmail'
 
 
 function isExpired(expiresAt) {
@@ -21,16 +22,18 @@ const [list, setList] = useState([])
   const [copied, setCopied] = useState(false);
   console.log(list)
 
-  const handleCopy = async (value) => {
+  const handleCopy =  (value) => {
     try {
       console.log(value)
-      await navigator.clipboard.writeText(value);
+       navigator.clipboard.writeText(value);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
     } catch (err) {
       console.error('Failed to copy address:', err);
     }
   };
+
+
 
   const renderList = list?.length > 0 && list.map(item => {
     let link = createLink(item?.invitation.invitationToken)
@@ -40,6 +43,7 @@ const [list, setList] = useState([])
       <div>{item?.invitation.status}</div>
       <div>{isExpired(item?.invitation.expiresAt)}</div>
       <div><button onClick={() => handleCopy(link)}> Copy Link </button></div>
+      <div><button onClick={() => resendEmail({token: item?.invitation.invitationToken})}> Resend Email </button></div>
     </div>
   })
 

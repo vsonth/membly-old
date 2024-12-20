@@ -8,13 +8,10 @@ import { validateInviteToken } from '@/app/(app)/invite/[token]/actions/validate
 
 
 export default function Page(): ReactElement {
-  const [error, setError] = useState(false)
   const params = useParams()
   const router = useRouter()
 
 
-  // const result = await validateInviteToken({token: params.token})
-  // console.log(result)
 
   useEffect(() => {
     if (params.token) {

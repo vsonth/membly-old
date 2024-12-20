@@ -21,6 +21,9 @@ export interface SignupResponse {
 interface SignupParams {
   email: string;
   password: string;
+  invitationToken: string;
+  firstName: string;
+  lastName: string;
 }
 
 export async function signup({
@@ -87,3 +90,12 @@ export async function signup({
     return { success: false, error: 'An error occurred' }
   }
 }
+
+
+//TODO: Check Brevo
+//TODO: Customer sign up does not update firstname and lastname
+//TODO: Start Integrating Calendily
+//TODO: Start Integrating Zoom
+//TODO: Start Integrating Google Meets
+//TODO: How to do CRON job to send emails on time
+//TODO: Hooks to get data from FB

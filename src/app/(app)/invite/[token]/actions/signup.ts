@@ -34,7 +34,6 @@ export async function signup({
                                lastName,
                              }: SignupParams): Promise<SignupResponse> {
   const payload = await getPayload({ config })
-  console.log(email)
   const { docs, ...rest } = await payload.find({
     collection: 'invitations',
     where: {
@@ -43,7 +42,7 @@ export async function signup({
       },
     },
   })
-  const customer = await payload.find({
+  const { docs: customer } = await payload.find({
     collection: 'customers',
     where: {
       email: {
@@ -52,24 +51,40 @@ export async function signup({
     },
   })
 
-  console.log(customer, 'signup')
+  const token = await payload.forgotPassword({
+    collection: 'customers',
+    data: {
+      email: email,
+    },
+    disableEmail: false, // you can disable the auto-generation of email via local API
+  })
+
+  console.log(token, 'token')
+
+  await payload.resetPassword({
+    collection: 'customers',
+    data: {
+      password: password,
+      token: token,
+    }
+  })
   try {
     const result = await payload.update({
       collection: 'customers',
       where: {
         id: {
-          equals: customer.id,
+          equals: customer[0].id,
         },
       },
       data: {
         email,
-        password,
         firstName,
         lastName,
         invitation: docs[0].id,
         associatedMember: docs[0].member.id,
       },
     })
+// TODO: Update password by using the reset-password token to update the password
 
     if (result) {
       await payload.update({
@@ -92,9 +107,10 @@ export async function signup({
 }
 
 
-//TODO: Check Brevo
-//TODO: Customer sign up does not update firstname and lastname
-//TODO: Start Integrating Calendily
+// Check Brevo
+// Customer sign up does not update firstname and lastname
+//TODO: Start Integrating Calendily ?
+//TODO: Start Integrating Full Calendar
 //TODO: Start Integrating Zoom
 //TODO: Start Integrating Google Meets
 //TODO: How to do CRON job to send emails on time

@@ -10,6 +10,7 @@ export default async function NavBar({}: {}): Promise<ReactElement> {
     <div className='flex flex-row justify-between flex-grow'>
       <Link href={'/member/memberships'}>Memberships</Link>
       <Link href={'/member/customers'}>Customers</Link>
+      <Link href={'/member/calendar'}>Calendar</Link>
       <div>Logout</div>
     </div>
   </div>

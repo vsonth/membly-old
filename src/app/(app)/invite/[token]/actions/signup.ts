@@ -59,8 +59,6 @@ export async function signup({
     disableEmail: false, // you can disable the auto-generation of email via local API
   })
 
-  console.log(token, 'token')
-
   await payload.resetPassword({
     collection: 'customers',
     data: {
@@ -84,7 +82,7 @@ export async function signup({
         associatedMember: docs[0].member.id,
       },
     })
-// TODO: Update password by using the reset-password token to update the password
+
 
     if (result) {
       await payload.update({
@@ -109,9 +107,12 @@ export async function signup({
 
 // Check Brevo
 // Customer sign up does not update firstname and lastname
-//TODO: Start Integrating Calendily ?
-//TODO: Start Integrating Full Calendar
+// Update password by using the reset-password token to update the password
+// Start Integrating Full Calendar
+//TODO: Save calendar data to DB and retrive it
+//TODO: Allow recursive dates
 //TODO: Start Integrating Zoom
-//TODO: Start Integrating Google Meets
 //TODO: How to do CRON job to send emails on time
 //TODO: Hooks to get data from FB
+//TODO: Start Integrating Google Meets
+//TODO: Start Integrating Calendily ?

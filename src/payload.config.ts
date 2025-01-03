@@ -15,6 +15,7 @@ import brevoAdapter from './utils/brevoAdapter'
 import { Customers } from './collections/Customers'
 import { Members } from '@/collections/Members'
 import { Memberships } from '@/collections/Memberships'
+import { Events } from '@/collections/Events'
 import sendInvitationEmail from '@/app/(app)/(authenticated)/member/memberships/actions/sendInvitationEmail'
 import Invitations from '@/collections/Invitations'
 
@@ -29,7 +30,7 @@ export default buildConfig({
     },
   },
   email: brevoAdapter(),
-  collections: [Users, Media, Customers, Members, Memberships, Invitations],
+  collections: [Users, Media, Customers, Members, Memberships, Invitations, Events],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

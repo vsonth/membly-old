@@ -10,6 +10,7 @@ import { useState } from 'react'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
+import { createEvent } from '@/app/(app)/(authenticated)/member/calendar/actions/createEvent'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -70,6 +71,9 @@ export default function Calendar() {
         end: tzEnd
       }
       console.log(newEvent)
+      createEvent(newEvent).then(r => {
+        console.log(newEvent)
+      })
       // Update the state with the new event
       setSelectedEvents((prevEvents) => [...prevEvents, newEvent])
     }

@@ -3,10 +3,11 @@
 import payload, { getPayload } from 'payload'
 import config from '@payload-config'
 import { Event } from '@/payload-types'
+import { getUser } from '@/app/(app)/(authenticated)/actions/getUser'
 
 export async function createEvent({...selectInfo}): Promise<Event | null> {
   const payload = await getPayload({ config })
-
+  const user = await getUser()
   const { start, end } = selectInfo
 
   // Prompt for a title (optional)
@@ -17,26 +18,17 @@ export async function createEvent({...selectInfo}): Promise<Event | null> {
   const newEvent = {
     ...selectInfo,
     title: 'title 1',
-    startStr: start,
-    endStr: end,
+    start: start,
+    end: end,
+    member: user.id
   }
-  console.log(newEvent)
-  // const eventData = {
-  //   title: 'loel',
-  //   start: '2024-12-31T14:30:00-06:00',
-  //   end: '2024-12-31T16:00:00-06:00',
-  //   startStr: '2025-01-01T02:00:00+05:30',
-  //   endStr: '2025-01-01T03:30:00+05:30',
-  //   allDay: false,
-  // }
 
   try {
     const createdEvent = await payload.create({
       collection: 'events',
-      data: { ...newEvent },
+      data: newEvent,
     })
 
-    console.log('Event Created:', createdEvent)
     return { success: true }
   } catch (error) {
     console.error('Error creating event:', error)

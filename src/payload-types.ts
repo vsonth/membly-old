@@ -221,8 +221,9 @@ export interface Membership {
 export interface Event {
   id: string;
   title: string;
-  startStr: string;
-  endStr: string;
+  start: string;
+  end: string;
+  member: string | Member;
   updatedAt: string;
   createdAt: string;
 }
@@ -420,8 +421,9 @@ export interface InvitationsSelect<T extends boolean = true> {
  */
 export interface EventsSelect<T extends boolean = true> {
   title?: T;
-  startStr?: T;
-  endStr?: T;
+  start?: T;
+  end?: T;
+  member?: T;
   updatedAt?: T;
   createdAt?: T;
 }

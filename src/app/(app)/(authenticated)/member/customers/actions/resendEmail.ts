@@ -34,5 +34,4 @@ export async function resendEmail({ token }: EmailParams): Promise<Response> {
     subject: 'You’ve been invited to join!',
     html: `<p> Click <a href="${invitationLink}">here</a> to accept.</p>`,
   });
-  console.log(customerEmail)
 }

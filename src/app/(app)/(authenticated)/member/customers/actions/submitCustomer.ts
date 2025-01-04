@@ -18,7 +18,6 @@ export interface Response {
 export async function submitCustomer({email }: CustomerParams): Promise<Response> {
   const payload = await getPayload({ config })
   const user = await getUser()
-  console.log(email, user.id)
   const invitation = await payload.create({
     collection: 'invitations',
     data: { customerEmail: email, member: user.id  },

@@ -15,7 +15,6 @@ export const CreateMemberships = () => {
       description: '',
     }}
     onSubmit={async (values) => {
-      console.log(values)
       submitMembership(values as MembershipParams).then(r => console.log(r))
 
     }}

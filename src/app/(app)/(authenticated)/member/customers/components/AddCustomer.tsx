@@ -10,7 +10,6 @@ export const AddCustomer = () => {
       email: '',
     }}
     onSubmit={async (values) => {
-      console.log(values.email)
       submitCustomer({ email: values.email } as CustomerParams).then(r => console.log(r))
 
     }}

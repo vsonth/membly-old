@@ -15,13 +15,19 @@ export const Events: CollectionConfig = {
       required: true,
     },
     {
-      name: 'startStr',
+      name: 'start',
       type: 'date',
       required: true,
     },
     {
-      name: 'endStr',
+      name: 'end',
       type: 'date',
+      required: true,
+    },
+    {
+      name: 'member',
+      type: 'relationship',
+      relationTo: 'members', // References the "members" collection
       required: true,
     },
   ],

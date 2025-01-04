@@ -17,6 +17,5 @@ export async function getMembershipsByMember(): Promise<Membership | null> {
       },
     },
   })
-  console.log(result)
   return result.docs
 }

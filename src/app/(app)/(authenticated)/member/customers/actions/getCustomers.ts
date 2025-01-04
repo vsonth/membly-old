@@ -17,6 +17,5 @@ export async function getCustomers(): Promise<Membership | null> {
       },
     },
   })
-  console.log(result)
   return result.docs
 }

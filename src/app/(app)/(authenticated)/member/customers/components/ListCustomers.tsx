@@ -20,7 +20,6 @@ function createLink(invitationToken: any) {
 export default function ListCustomers({}:{}): ReactElement {
 const [list, setList] = useState([])
   const [copied, setCopied] = useState(false);
-  console.log(list)
 
   const handleCopy =  (value) => {
     try {

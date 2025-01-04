@@ -1,22 +1,12 @@
 import type { CollectionConfig } from 'payload'
 
-type EventsConfig = {
-  admin: { useAsTitle: string };
-  fields: ({
-    name: string;
-    type: string;
-    required: boolean
-  } | { name: string; type: string } | {
-    defaultValue: boolean;
-    name: string;
-    type: string
-  })[];
-  slug: string
-}
-export const Events: EventsConfig = {
+export const Events: CollectionConfig = {
   slug: 'events',
   admin: {
     useAsTitle: 'title',
+  },
+  access: {
+    create: () => true,
   },
   fields: [
     {
@@ -25,27 +15,14 @@ export const Events: EventsConfig = {
       required: true,
     },
     {
-      name: 'start',
-      type: 'datetime',
-      required: true,
-    },
-    {
-      name: 'end',
-      type: 'datetime',
-      required: true,
-    },
-    {
       name: 'startStr',
-      type: 'text',
+      type: 'date',
+      required: true,
     },
     {
       name: 'endStr',
-      type: 'text',
-    },
-    {
-      name: 'allDay',
-      type: 'checkbox',
-      defaultValue: false,
+      type: 'date',
+      required: true,
     },
   ],
 }

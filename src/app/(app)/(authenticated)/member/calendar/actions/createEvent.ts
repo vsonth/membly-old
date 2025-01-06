@@ -5,6 +5,8 @@ import config from '@payload-config'
 import { Event } from '@/payload-types'
 import { getUser } from '@/app/(app)/(authenticated)/actions/getUser'
 
+
+
 export async function createEvent({...selectInfo}): Promise<Event | null> {
   const payload = await getPayload({ config })
   const user = await getUser()

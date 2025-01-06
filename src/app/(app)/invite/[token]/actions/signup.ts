@@ -109,7 +109,7 @@ export async function signup({
 // Customer sign up does not update firstname and lastname
 // Update password by using the reset-password token to update the password
 // Start Integrating Full Calendar
-//TODO: Save calendar data to DB and retrive it
+// Save calendar data to DB and retrive it
 //TODO: Allow recursive dates
 //TODO: Start Integrating Zoom
 //TODO: How to do CRON job to send emails on time

@@ -11,7 +11,7 @@ const Layout: FC<LayoutProps> = async ({ children }) => {
 
   return <div className='flex flex-col '>
     <div className='h-[calc(10vh-3rem)]'><NavBar></NavBar></div>
-    <div className='h-[calc(100vh)] p-2'>{children}</div>
+    <div className='h-[calc(100vh)] p-4'>{children}</div>
   </div>
 }
 

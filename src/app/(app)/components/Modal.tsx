@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useState } from 'react'
 
-export default function Modal({ isOpen, close, submit, children}) {
+export default function Modal({ isOpen, close, children}) {
 
 
   return (

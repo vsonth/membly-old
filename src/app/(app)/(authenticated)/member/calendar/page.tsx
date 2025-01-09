@@ -1,17 +1,21 @@
 'use client'
 
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 import Calendar from '@/app/(app)/components/Calendar'
 import { createEvent } from '@/app/(app)/(authenticated)/member/calendar/actions/createEvent'
 import { getEvents } from '@/app/(app)/(authenticated)/member/calendar/actions/getEvent'
 import Dialog from '@/app/(app)/components/Modal'
 import { useDialog } from '@/app/(app)/components/Dialog.hook'
 import Modal from '@/app/(app)/components/Modal'
-import { Button, DialogPanel, DialogTitle } from '@headlessui/react'
+import {  DialogPanel, DialogTitle } from '@headlessui/react'
+import SubmitButton from '@/app/(app)/components/SubmitButton'
+import Button from '@/app/(app)/components/PrimaryButton'
+import PrimaryButton from '@/app/(app)/components/PrimaryButton'
 
 export default function page(): ReactElement {
   const [events, setEvents] = useState([])
-  const {isOpen, open} = useDialog()
+  const [info, setInfo] = useState(null)
+  const {isOpen, open, close} = useDialog()
 
   function handleEvents() {
     getEvents().then((e) => {
@@ -26,13 +30,19 @@ export default function page(): ReactElement {
     })
   }
 
+  const handleOpen = useCallback((selectInfo) => {
+    setInfo(selectInfo)
+    console.log(selectInfo)
+    open();
+  },[])
+
   useEffect(() => {
     handleEvents()
   }, [])
   return (<div className='flex flex-col'>
       <div className='h-[calc(10vh)]'>Calendar Page</div>
-      <div className='p-2'><Calendar handleDateSelect={open}  events={events}/></div>
-      <Modal isOpen={isOpen} close={() => {}} submit={()=> {}}>
+      <div className='p-2'><Calendar handleDateSelect={handleOpen}  events={events}/></div>
+      <Modal isOpen={isOpen} close={close} submit={()=> {}}>
         <DialogPanel
           transition
           className="w-full max-w-md rounded-xl bg-white/5 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
@@ -40,9 +50,24 @@ export default function page(): ReactElement {
           <DialogTitle as="h3" className="text-base/7 font-medium text-white">
             Create Event
           </DialogTitle>
-          <p className="mt-2 text-sm/6 text-white/50">
+          <div className="mt-2 text-sm/6 text-white/50">
     Please create the event
-          </p>
+          </div>
+          <form className="flex flex-col gap-4" onSubmit={handleDateSelect}>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="email">Event Name</label>
+              <input className="w-full textInput" name="name" id="name"  />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="email">Start Date</label>
+              <input className="w-full textInput" name="start" id="start" value={info?.start}  />
+            </div>       <div className="flex flex-col gap-2">
+              <label htmlFor="email">Start Date</label>
+              <input className="w-full textInput" name="start" id="start" value={info?.end}  />
+            </div>
+            <SubmitButton  text="Create event" />
+          </form>
+          <PrimaryButton  text="Cancel" onClick={close} />
 
         </DialogPanel>
       </Modal>

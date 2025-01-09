@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 
 export const useDialog = () => {
@@ -13,9 +13,9 @@ export const useDialog = () => {
     setIsOpen(false)
   }
 
-  return {
+  return useMemo(() => ({
     isOpen,
     open,
     close,
-  }
+  }), [isOpen])
 }

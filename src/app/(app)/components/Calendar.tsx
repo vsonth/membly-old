@@ -4,7 +4,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 
 
-export default function Calendar({ handleDateSelect,events }) {
+export default function Calendar({ handleDateSelect,events, handleDateSet }) {
 
   return (
 
@@ -26,6 +26,7 @@ export default function Calendar({ handleDateSelect,events }) {
       select={handleDateSelect}
       selectMirror={true}
       events={events}
+      datesSet={handleDateSet}
     />
 
   )

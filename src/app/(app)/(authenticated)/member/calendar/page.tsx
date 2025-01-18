@@ -4,45 +4,62 @@ import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 import Calendar from '@/app/(app)/components/Calendar'
 import { createEvent } from '@/app/(app)/(authenticated)/member/calendar/actions/createEvent'
 import { getEvents } from '@/app/(app)/(authenticated)/member/calendar/actions/getEvent'
-import Dialog from '@/app/(app)/components/Modal'
-import { useDialog } from '@/app/(app)/components/Dialog.hook'
 import Modal from '@/app/(app)/components/Modal'
-import {  DialogPanel, DialogTitle } from '@headlessui/react'
+import { useDialog } from '@/app/(app)/components/Dialog.hook'
+import { DialogPanel, DialogTitle } from '@headlessui/react'
 import SubmitButton from '@/app/(app)/components/SubmitButton'
-import Button from '@/app/(app)/components/PrimaryButton'
 import PrimaryButton from '@/app/(app)/components/PrimaryButton'
 
 export default function page(): ReactElement {
+  const [dateSet, setDates] = useState(null)
   const [events, setEvents] = useState([])
   const [info, setInfo] = useState(null)
-  const {isOpen, open, close} = useDialog()
+  const { isOpen, open, close } = useDialog()
+
+
+  const handleDatesSet = (arg: {
+    start: Date;
+    end: Date;
+    startStr: string;
+    endStr: string;
+  }) => {
+    console.log("Week start:", arg.startStr);
+    console.log("Week end:", arg.endStr);
+    setDates([arg.startStr, arg.endStr])
+  };
 
   function handleEvents() {
-    getEvents().then((e) => {
+    getEvents({ dateSet }).then((e) => {
       setEvents(e.events)
     })
   }
 
+  console.log(events)
 
-  const handleDateSelect = (selectInfo) => {
-    createEvent(selectInfo).then(r => {
+  const handleDateSelect = (e) => {
+    e.preventDefault()
+    createEvent(info).then(r => {
       handleEvents()
+      close()
     })
   }
 
   const handleOpen = useCallback((selectInfo) => {
     setInfo(selectInfo)
     console.log(selectInfo)
-    open();
-  },[])
+    open()
+  }, [open])
 
   useEffect(() => {
-    handleEvents()
-  }, [])
-  return (<div className='flex flex-col'>
-      <div className='h-[calc(10vh)]'>Calendar Page</div>
-      <div className='p-2'><Calendar handleDateSelect={handleOpen}  events={events}/></div>
-      <Modal isOpen={isOpen} close={close} submit={()=> {}}>
+    if(dateSet != null){
+      handleEvents()
+    }
+  }, [dateSet])
+  let handleClose = () => close()
+  return (<div className="flex flex-col">
+      <div className="h-[calc(10vh)]">Calendar Page</div>
+      <div className="p-2"><Calendar handleDateSelect={handleOpen} events={events} handleDateSet={handleDatesSet} /></div>
+      <Modal isOpen={isOpen} close={close} submit={() => {}}>
         <DialogPanel
           transition
           className="w-full max-w-md rounded-xl bg-white/5 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
@@ -51,23 +68,25 @@ export default function page(): ReactElement {
             Create Event
           </DialogTitle>
           <div className="mt-2 text-sm/6 text-white/50">
-    Please create the event
+            Please create the event
           </div>
           <form className="flex flex-col gap-4" onSubmit={handleDateSelect}>
             <div className="flex flex-col gap-2">
               <label htmlFor="email">Event Name</label>
-              <input className="w-full textInput" name="name" id="name"  />
+              <input className="w-full textInput" name="name" id="name" />
             </div>
             <div className="flex flex-col gap-2">
               <label htmlFor="email">Start Date</label>
-              <input className="w-full textInput" name="start" id="start" value={info?.start}  />
-            </div>       <div className="flex flex-col gap-2">
-              <label htmlFor="email">Start Date</label>
-              <input className="w-full textInput" name="start" id="start" value={info?.end}  />
+              <input className="w-full textInput" name="start" id="start" value={info?.start} />
             </div>
-            <SubmitButton  text="Create event" />
+            <div className="flex flex-col gap-2">
+              <label htmlFor="email">Start Date</label>
+              <input className="w-full textInput" name="start" id="start" value={info?.end} />
+            </div>
+            <SubmitButton text="Create event" />
+            <PrimaryButton text="Cancel" onClick={handleClose} />
           </form>
-          <PrimaryButton  text="Cancel" onClick={close} />
+
 
         </DialogPanel>
       </Modal>

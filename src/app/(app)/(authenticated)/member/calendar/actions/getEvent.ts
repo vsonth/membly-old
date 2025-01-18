@@ -32,10 +32,9 @@ const event = {
 };
 
 
-export async function getEvents(): any {
+export async function getEvents({dateSet}): any {
   const payload = await getPayload({ config })
   const user = await getUser()
-
 
   try {
     const events = await payload.find({
@@ -44,9 +43,15 @@ export async function getEvents(): any {
         member: {
           equals: user.id,
         },
+        start: {
+          greater_than_equal: dateSet[0],
+        },
+        end: {
+          less_than_equal: dateSet[1],
+        },
       },
+      pagination: false,
     })
-
     return { success: true, events: events.docs }
   } catch (error) {
     console.error('Error gettings event:', error)

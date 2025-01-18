@@ -2,10 +2,9 @@ import React, { ReactElement } from "react";
 import {  Button  } from '@headlessui/react'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
-export default function PrimaryButton({  text, onClick }: {  text: string,  }): ReactElement {
+export default function PrimaryButton({  text, onClick }: {  text: string; onClick: () => void  }): ReactElement {
   console.log(onClick)
   return <button
-    type="submit"
     className="bg-white relative text-black rounded-md p-2 w-full"
   >
     {text}

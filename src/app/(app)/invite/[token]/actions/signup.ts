@@ -110,7 +110,7 @@ export async function signup({
 // Update password by using the reset-password token to update the password
 // Start Integrating Full Calendar
 // Save calendar data to DB and retrive it
-//TODO: Allow recursive dates
+// Allow recursive dates
 //TODO: Start Integrating Zoom
 //TODO: How to do CRON job to send emails on time
 //TODO: Hooks to get data from FB

@@ -30,37 +30,8 @@ export default function page(): ReactElement {
   }
 
   function handleEvents() {
-    const startDate = new Date(dateSet[0])
-    const endDate = new Date(dateSet[1])
-    getEvents({ dateSet }).then(({ events }) => {
-      const eventsWithFrequency = events.map(x => {
-        const startHour = new Date(x.start).getHours()
-        const startMinutes = new Date(x.start).getMinutes()
-        const endHour = new Date(x.end).getHours()
-        const endMinutes = new Date(x.end).getMinutes()
-        if (x?.ruleString) {
-          const rruleObj = rrulestr(x?.ruleString)
-          const prepareRule = new RRule(rruleObj.options)
-          const frequency = prepareRule.between(datetime(startDate.getUTCFullYear(), startDate.getUTCMonth() + 1, startDate.getUTCDate()),
-            datetime(endDate.getUTCFullYear(), endDate.getUTCMonth() + 1, endDate.getUTCDate() +1)).map(fs => {
-            const startFs = new Date(fs)
-            startFs.setHours(startHour)
-            startFs.setMinutes(startMinutes)
-            const endFs = new Date(fs)
-            endFs.setHours(endHour)
-            endFs.setMinutes(endMinutes)
-
-            return [startFs, endFs]
-          })
-          return { ...x, frequency }
-        }
-      })
-
-      setEvents(eventsWithFrequency.map(e => e.frequency.map(f => ({
-        start: f[0],
-        end: f[1],
-        title: e.title,
-      }))).flat(1))
+    getEvents({dateSet}).then(({ events }) => {
+      setEvents(events)
     })
   }
 

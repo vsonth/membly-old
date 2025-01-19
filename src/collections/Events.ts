@@ -30,5 +30,10 @@ export const Events: CollectionConfig = {
       relationTo: 'members', // References the "members" collection
       required: true,
     },
+    {
+      name: 'ruleString',
+      type: 'text',
+      required: false,
+    },
   ],
 }

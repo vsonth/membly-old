@@ -224,6 +224,7 @@ export interface Event {
   start: string;
   end: string;
   member: string | Member;
+  ruleString?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -424,6 +425,7 @@ export interface EventsSelect<T extends boolean = true> {
   start?: T;
   end?: T;
   member?: T;
+  ruleString?: T;
   updatedAt?: T;
   createdAt?: T;
 }

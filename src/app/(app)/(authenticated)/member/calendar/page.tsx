@@ -9,9 +9,12 @@ import { useDialog } from '@/app/(app)/components/Dialog.hook'
 import { DialogPanel, DialogTitle } from '@headlessui/react'
 import SubmitButton from '@/app/(app)/components/SubmitButton'
 import PrimaryButton from '@/app/(app)/components/PrimaryButton'
+import RRuleField from '@/app/(app)/components/RRuleField'
+import { datetime, RRule, rrulestr } from 'rrule'
 
 export default function page(): ReactElement {
   const [dateSet, setDates] = useState(null)
+  const [rule, setRule] = useState({})
   const [events, setEvents] = useState([])
   const [info, setInfo] = useState(null)
   const { isOpen, open, close } = useDialog()
@@ -23,14 +26,51 @@ export default function page(): ReactElement {
     startStr: string;
     endStr: string;
   }) => {
-    console.log("Week start:", arg.startStr);
-    console.log("Week end:", arg.endStr);
     setDates([arg.startStr, arg.endStr])
-  };
+  }
 
   function handleEvents() {
-    getEvents({ dateSet }).then((e) => {
-      setEvents(e.events)
+    const startDate = new Date(dateSet[0])
+    const endDate = new Date(dateSet[1])
+    console.log(startDate, endDate)
+    getEvents({ dateSet }).then(({ events }) => {
+      const eventsWithFrequency = events.map(x => {
+        const startHour = new Date(x.start).getHours()
+        const startMinutes = new Date(x.start).getMinutes()
+        console.log(startHour)
+        console.log(startMinutes)
+        const endHour = new Date(x.end).getHours()
+        const endMinutes = new Date(x.end).getMinutes()
+        console.log(endHour)
+        console.log(endMinutes)
+        if (x?.ruleString) {
+          const rruleObj = rrulestr(x?.ruleString)
+          const prepareRule = new RRule(rruleObj.options)
+
+          const frequency = prepareRule.between(datetime(startDate.getUTCFullYear(), startDate.getUTCMonth() + 1, startDate.getUTCDate()),
+            datetime(endDate.getUTCFullYear(), endDate.getUTCMonth() + 1, endDate.getUTCDate())).map(fs => {
+            const startFs = new Date(fs)
+            startFs.setHours(startHour)
+            startFs.setMinutes(startMinutes)
+            const endFs = new Date(fs)
+            endFs.setHours(endHour)
+            endFs.setMinutes(endMinutes)
+
+            return [startFs, endFs]
+          })
+          return { ...x, frequency }
+        }
+      })
+      console.log(eventsWithFrequency.map(e => e.frequency.map(f => ({
+        start: f[0],
+        end: f[1],
+        title: e.title,
+      }))).flat(1))
+      setEvents(eventsWithFrequency.map(e => e.frequency.map(f => ({
+        start: f[0],
+        end: f[1],
+        title: e.title,
+      }))).flat(1))
     })
   }
 
@@ -38,7 +78,14 @@ export default function page(): ReactElement {
 
   const handleDateSelect = (e) => {
     e.preventDefault()
-    createEvent(info).then(r => {
+    const date = new Date(info.start)
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const dtstart = datetime(year, month, day)
+    // Convert the rule to a string for storage
+    const ruleString = new RRule({ ...rule, dtstart }).toString()
+    createEvent({ info, ruleString }).then(r => {
       handleEvents()
       close()
     })
@@ -47,19 +94,29 @@ export default function page(): ReactElement {
   const handleOpen = useCallback((selectInfo) => {
     setInfo(selectInfo)
     console.log(selectInfo)
+    const date = new Date(selectInfo.start)
+    console.log(date.getFullYear())
+    console.log(date.getMonth() + 1)
+    console.log(date.getDate())
     open()
   }, [open])
 
+  const handleRuleChange = (rule) => {
+    setRule(rule)
+  }
+
   useEffect(() => {
-    if(dateSet != null){
+    if (dateSet != null) {
       handleEvents()
     }
   }, [dateSet])
   let handleClose = () => close()
   return (<div className="flex flex-col">
       <div className="h-[calc(10vh)]">Calendar Page</div>
-      <div className="p-2"><Calendar handleDateSelect={handleOpen} events={events} handleDateSet={handleDatesSet} /></div>
-      <Modal isOpen={isOpen} close={close} submit={() => {}}>
+      <div className="p-2"><Calendar handleDateSelect={handleOpen} events={events} handleDateSet={handleDatesSet} />
+      </div>
+      <Modal isOpen={isOpen} close={close} submit={() => {
+      }}>
         <DialogPanel
           transition
           className="w-full max-w-md rounded-xl bg-white/5 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
@@ -82,6 +139,9 @@ export default function page(): ReactElement {
             <div className="flex flex-col gap-2">
               <label htmlFor="email">Start Date</label>
               <input className="w-full textInput" name="start" id="start" value={info?.end} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <RRuleField value={rule} onChange={handleRuleChange} />
             </div>
             <SubmitButton text="Create event" />
             <PrimaryButton text="Cancel" onClick={handleClose} />

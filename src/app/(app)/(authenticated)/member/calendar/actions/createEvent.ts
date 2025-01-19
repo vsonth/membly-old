@@ -7,10 +7,11 @@ import { getUser } from '@/app/(app)/(authenticated)/actions/getUser'
 
 
 
-export async function createEvent({...selectInfo}): Promise<Event | null> {
+export async function createEvent({info, ruleString}): Promise<Event | null> {
   const payload = await getPayload({ config })
   const user = await getUser()
-  const { start, end } = selectInfo
+  const { start, end } = info
+  console.log(ruleString)
 
   // Prompt for a title (optional)
   // const title = prompt('Enter a title for this event') || 'Untitled Event'
@@ -18,15 +19,16 @@ export async function createEvent({...selectInfo}): Promise<Event | null> {
 
   // Create a new event object
   const newEvent = {
-    ...selectInfo,
+    ...info,
     title: 'title 1',
     start: start,
     end: end,
-    member: user.id
+    member: user.id,
+    ruleString: ruleString
   }
 
   try {
-    const createdEvent = await payload.create({
+    await payload.create({
       collection: 'events',
       data: newEvent,
     })

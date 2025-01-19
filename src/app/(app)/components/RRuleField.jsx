@@ -24,7 +24,7 @@ const weekdaysOptions = [
 
 const RRuleField = ({ value, onChange }) => {
   const [frequency, setFrequency] = useState(value?.freq || RRule.WEEKLY);
-  const [interval, setInterval] = useState(value?.interval || 1);
+  const [interval, setInterval] = useState(value?.interval || null);
   const [weekdays, setWeekdays] = useState(value?.byweekday || []);
 
   // Update the RRule object
@@ -41,7 +41,8 @@ const RRuleField = ({ value, onChange }) => {
   // Handlers for updates
   const handleFrequencyChange = (option) => {
     setFrequency(option.value);
-    updateRRule({ freq: option.value });
+    let isWeekly = option.value === RRule.WEEKLY
+    updateRRule({ freq: option.value, byweekday: isWeekly ? weekdays :  [] });
   };
 
   const handleIntervalChange = (e) => {
@@ -85,14 +86,14 @@ const RRuleField = ({ value, onChange }) => {
         </div>
       </Listbox>
 
-      <label className="block font-medium mt-4 mb-2">Interval</label>
-      <input
-        type="number"
-        value={interval}
-        onChange={handleIntervalChange}
-        min="1"
-        className="w-full px-3 py-2 border border-gray-300 rounded-md text-black"
-      />
+      {/*<label className="block font-medium mt-4 mb-2">Interval</label>*/}
+      {/*<input*/}
+      {/*  type="number"*/}
+      {/*  value={interval}*/}
+      {/*  onChange={handleIntervalChange}*/}
+      {/*  min="1"*/}
+      {/*  className="w-full px-3 py-2 border border-gray-300 rounded-md text-black"*/}
+      {/*/>*/}
 
       {frequency === RRule.WEEKLY && (
         <>

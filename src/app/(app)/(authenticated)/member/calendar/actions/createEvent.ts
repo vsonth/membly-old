@@ -10,8 +10,7 @@ import { getUser } from '@/app/(app)/(authenticated)/actions/getUser'
 export async function createEvent({info, ruleString}): Promise<Event | null> {
   const payload = await getPayload({ config })
   const user = await getUser()
-  const { start, end } = info
-  console.log(ruleString)
+  const { start, end, } = info
 
   // Prompt for a title (optional)
   // const title = prompt('Enter a title for this event') || 'Untitled Event'
@@ -20,7 +19,7 @@ export async function createEvent({info, ruleString}): Promise<Event | null> {
   // Create a new event object
   const newEvent = {
     ...info,
-    title: 'title 1',
+    title: info.title,
     start: start,
     end: end,
     member: user.id,

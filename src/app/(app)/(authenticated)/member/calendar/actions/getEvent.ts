@@ -32,7 +32,7 @@ const event = {
 };
 
 
-export async function getEvents({dateSet}): any {
+export async function getEvents(): any {
   const payload = await getPayload({ config })
   const user = await getUser()
 
@@ -42,12 +42,6 @@ export async function getEvents({dateSet}): any {
       where: {
         member: {
           equals: user.id,
-        },
-        start: {
-          greater_than_equal: dateSet[0],
-        },
-        end: {
-          less_than_equal: dateSet[1],
         },
       },
       pagination: false,

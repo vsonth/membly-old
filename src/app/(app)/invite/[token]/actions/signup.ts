@@ -116,3 +116,8 @@ export async function signup({
 //TODO: Hooks to get data from FB
 //TODO: Start Integrating Google Meets
 //TODO: Start Integrating Calendily ?
+//TODO: https://github.com/jeanbmar/payload-s3-upload
+//TODO: https://github.com/Aengz/payload-redis-cache
+//TODO: https://github.com/ahmetskilinc/payload-appointments-plugin
+//TODO: https://github.com/tomashco/payload-instagram-plugin
+//TODO: https://github.com/joas8211/payload-tenancy

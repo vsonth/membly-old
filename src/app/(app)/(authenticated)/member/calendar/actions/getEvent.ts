@@ -15,7 +15,7 @@ export async function getEvents({ dateSet }): any {
       collection: 'events',
       where: {
         member: {
-          equals: user.id,
+          equals: user?.id,
         },
       },
       pagination: false,

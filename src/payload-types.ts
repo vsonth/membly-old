@@ -20,6 +20,7 @@ export interface Config {
     memberships: Membership;
     invitations: Invitation;
     events: Event;
+    accounts: Account;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -33,6 +34,7 @@ export interface Config {
     memberships: MembershipsSelect<false> | MembershipsSelect<true>;
     invitations: InvitationsSelect<false> | InvitationsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
+    accounts: AccountsSelect<false> | AccountsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -230,6 +232,45 @@ export interface Event {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "accounts".
+ */
+export interface Account {
+  id: string;
+  name?: string | null;
+  picture?: string | null;
+  user: string | User;
+  issuerName: string;
+  scope?: string | null;
+  sub: string;
+  passkey?: {
+    credentialId: string;
+    publicKey:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    counter: number;
+    transports:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    deviceType: string;
+    backedUp: boolean;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -262,6 +303,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'events';
         value: string | Event;
+      } | null)
+    | ({
+        relationTo: 'accounts';
+        value: string | Account;
       } | null);
   globalSlug?: string | null;
   user:
@@ -426,6 +471,30 @@ export interface EventsSelect<T extends boolean = true> {
   end?: T;
   member?: T;
   ruleString?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "accounts_select".
+ */
+export interface AccountsSelect<T extends boolean = true> {
+  name?: T;
+  picture?: T;
+  user?: T;
+  issuerName?: T;
+  scope?: T;
+  sub?: T;
+  passkey?:
+    | T
+    | {
+        credentialId?: T;
+        publicKey?: T;
+        counter?: T;
+        transports?: T;
+        deviceType?: T;
+        backedUp?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

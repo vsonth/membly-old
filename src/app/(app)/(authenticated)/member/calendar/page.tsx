@@ -11,6 +11,8 @@ import SubmitButton from '@/app/(app)/components/SubmitButton'
 import PrimaryButton from '@/app/(app)/components/PrimaryButton'
 import RRuleField from '@/app/(app)/components/RRuleField'
 import { datetime, RRule, rrulestr } from 'rrule'
+import ZoomAuthButton from '@/app/(app)/components/ZoomButton'
+import { getZoomAuthUrl } from '@/app/(app)/(authenticated)/member/calendar/actions/getAuthZoomUrl'
 
 export default function page(): ReactElement {
   const [dateSet, setDates] = useState(null)
@@ -73,6 +75,7 @@ export default function page(): ReactElement {
   let handleClose = () => close()
   return (<div className="flex flex-col">
       <div className="h-[calc(10vh)]">Calendar Page</div>
+      <div className="h-[calc(10vh)]"><ZoomAuthButton authUrl={getZoomAuthUrl()}/></div>
       <div className="p-2"><Calendar handleDateSelect={handleOpen} events={events} handleDateSet={handleDatesSet} />
       </div>
       <Modal isOpen={isOpen} close={close} submit={() => {
